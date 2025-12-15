@@ -98,8 +98,10 @@ export default function App() {
     prediction: PredictionRecord,
   ) => {
     try {
+      console.log('Adding prediction to Supabase:', prediction);
       await api.savePrediction(prediction);
       setPredictions([prediction, ...predictions]);
+      console.log('Prediction added successfully');
     } catch (error) {
       console.error("Error saving prediction:", error);
       alert("Gagal menyimpan prediksi. Silakan coba lagi.");
