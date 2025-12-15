@@ -10,7 +10,6 @@ import { LoginPage } from "./components/LoginPage";
 import { PredictionPage } from "./components/PredictionPage";
 import { HistoryPage } from "./components/HistoryPage";
 import { ProfilePage } from "./components/ProfilePage";
-import * as api from "./utils/api";
 
 export interface PredictionRecord {
   id: string;
@@ -35,9 +34,7 @@ export interface UserProfile {
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [predictions, setPredictions] = useState<
-    PredictionRecord[]
-  >([]);
+  const [predictions, setPredictions] = useState<PredictionRecord[]>([]);
   const [profile, setProfile] = useState<UserProfile>({
     name: "John Doe",
     email: "john.doe@example.com",
@@ -56,27 +53,20 @@ export default function App() {
     }
   }, []);
 
-  // Load data from Supabase
-  const loadData = async () => {
-    try {
-      const [fetchedPredictions, fetchedProfile] =
-        await Promise.all([
-          api.fetchPredictions(),
-          api.fetchProfile(),
-        ]);
+  // Load data from localStorage
+  const loadData = () => {
+    const savedPredictions = localStorage.getItem("predictions");
+    const savedProfile = localStorage.getItem("profile");
 
-      if (fetchedPredictions.length > 0) {
-        setPredictions(fetchedPredictions);
-      }
-
-      if (fetchedProfile) {
-        setProfile(fetchedProfile);
-      }
-    } catch (error) {
-      console.error("Error loading data:", error);
-    } finally {
-      setIsLoading(false);
+    if (savedPredictions) {
+      setPredictions(JSON.parse(savedPredictions));
     }
+
+    if (savedProfile) {
+      setProfile(JSON.parse(savedProfile));
+    }
+
+    setIsLoading(false);
   };
 
   // Handle login
@@ -93,41 +83,23 @@ export default function App() {
     setPredictions([]);
   };
 
-  // Save prediction to Supabase
-  const addPrediction = async (
-    prediction: PredictionRecord,
-  ) => {
-    try {
-      console.log('Adding prediction to Supabase:', prediction);
-      await api.savePrediction(prediction);
-      setPredictions([prediction, ...predictions]);
-      console.log('Prediction added successfully');
-    } catch (error) {
-      console.error("Error saving prediction:", error);
-      alert("Gagal menyimpan prediksi. Silakan coba lagi.");
-    }
+  // Save prediction to localStorage
+  const addPrediction = (prediction: PredictionRecord) => {
+    const updated = [prediction, ...predictions];
+    setPredictions(updated);
+    localStorage.setItem("predictions", JSON.stringify(updated));
   };
 
-  // Update profile in Supabase
-  const updateUserProfile = async (newProfile: UserProfile) => {
-    try {
-      await api.updateProfile(newProfile);
-      setProfile(newProfile);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Gagal mengupdate profile. Silakan coba lagi.");
-    }
+  // Update profile in localStorage
+  const updateUserProfile = (newProfile: UserProfile) => {
+    setProfile(newProfile);
+    localStorage.setItem("profile", JSON.stringify(newProfile));
   };
 
-  // Clear history from Supabase
-  const clearHistory = async () => {
-    try {
-      await api.clearAllPredictions();
-      setPredictions([]);
-    } catch (error) {
-      console.error("Error clearing history:", error);
-      alert("Gagal menghapus riwayat. Silakan coba lagi.");
-    }
+  // Clear history from localStorage
+  const clearHistory = () => {
+    setPredictions([]);
+    localStorage.removeItem("predictions");
   };
 
   // Show login page if not authenticated

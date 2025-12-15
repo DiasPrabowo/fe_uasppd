@@ -36,22 +36,20 @@ export function HistoryPage({ predictions, onClearHistory }: HistoryPageProps) {
     return smoker === 'yes' ? 'Ya' : 'Tidak';
   };
 
-  console.log('HistoryPage - Total predictions from Supabase:', predictions.length);
-
   return (
     <div className="max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-gray-900 mb-2">Riwayat Prediksi</h2>
           <p className="text-gray-600">
-            {predictions.length} prediksi tersimpan di Supabase
+            {predictions.length} prediksi tersimpan
           </p>
         </div>
 
         {predictions.length > 0 && (
           <button
             onClick={() => {
-              if (confirm('Hapus semua riwayat dari Supabase?')) {
+              if (confirm('Hapus semua riwayat?')) {
                 onClearHistory();
               }
             }}
@@ -67,7 +65,7 @@ export function HistoryPage({ predictions, onClearHistory }: HistoryPageProps) {
         <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
           <p className="text-gray-900 mb-2">Belum ada riwayat</p>
           <p className="text-gray-600 mb-6">
-            Prediksi yang Anda buat akan tersimpan di Supabase dan muncul di sini
+            Prediksi yang Anda buat akan muncul di sini
           </p>
           <a
             href="/"
