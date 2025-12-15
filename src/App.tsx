@@ -7,6 +7,7 @@ import {
 import { useState, useEffect } from "react";
 import { Layout } from "./components/Layout";
 import { LoginPage } from "./components/LoginPage";
+import { DashboardPage } from "./components/DashboardPage";
 import { PredictionPage } from "./components/PredictionPage";
 import { HistoryPage } from "./components/HistoryPage";
 import { ProfilePage } from "./components/ProfilePage";
@@ -125,6 +126,12 @@ export default function App() {
         <Routes>
           <Route
             path="/"
+            element={
+              <DashboardPage predictions={predictions} />
+            }
+          />
+          <Route
+            path="/prediction"
             element={
               <PredictionPage onAddPrediction={addPrediction} />
             }

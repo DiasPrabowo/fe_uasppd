@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, History, User, LogOut } from 'lucide-react';
+import { LayoutDashboard, Activity, History, User, LogOut } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,7 +11,8 @@ export function Layout({ children, onLogout }: LayoutProps) {
   const location = useLocation();
 
   const navItems = [
-    { path: '/', label: 'Prediksi', icon: Activity },
+    { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/prediction', label: 'Prediksi', icon: Activity },
     { path: '/history', label: 'Histori', icon: History },
     { path: '/profile', label: 'Profile', icon: User },
   ];
